@@ -1,0 +1,28 @@
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Saved</h1>
+    <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+  </div>
+</div>
+<ul>
+    {{#each savedArticles}}
+        <li>
+            {{headline}}
+            {{summary}}
+            {{url}}
+            <a class='btn btn-primary' id='editBtn' href="#">Edit Article</a>
+            <a class='btn btn-primary' id='deleteBtn' href="#">Delete Article</a>
+        </li>
+    {{/each}}
+</ul>
+
+{{!-- <script>
+    $('#editBtn').on('click', (event) => {
+        event.preventDefault();
+        $.get
+    })
+    $('#editBtn').on('click', (event) => {
+        event.preventDefault();
+        
+    })
+</script> --}}
