@@ -2,99 +2,99 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios')
 const cheerio = require('cheerio')
-const request = require('request')
-// renders saved articles page
-router.get('/saved', (req, res) => {
-    res.render('saved');
+const mongoose = require('mongoose')
+const Article = require('../model/Article.model')
+
+router.get('/', (req, res) => {
+    
+    Article.find({"saved": false}, function(articles){
+        console.log(articles)
+        res.render('landing', {
+            articles: articles
+        })
+    }) 
+        
+    
+   
 })
 
-function scraper() {
+
+router.get('/saved', (req, res) => {
+    Article.find({"saved": true}, function(articles){
+        res.render('saved', {
+            articles: articles
+        })
+        console.log(articles)
+    })
+})
+
+router.get('/scrape', (req, res) => {
     axios.get("https://ocweekly.com/category/news/").then((data) => {
         const $ = cheerio.load(data.data)
 
+        const articles = [];
+
        $('article.post .entry-title a').each((i, element) => {
-        const result = {};
+        const article = {};
 
-        result.title = $(element).text();
-        result.url = $(element).attr().href;
+        article.title = $(element).text();
+        article.link = $(element).attr().href;
+
+        articles.push(article);
         
-        console.log(result);
+      
+
        })
-
-       
-
-      
-       
-         
-        
+        Article.insertMany(articles)
+        .then(function(){
+            res.render('articles', {
+                articles:articles
+            })
            
-            
-        
-        
-       
-//          $('.site-main article').each(() => {
-//             const title = $('.title-container h3 a').text();
-//             const newTitle = `${title}, \n\n`
-//             console.log(newTitle);
-
-
-//             let url = $('.title-container a').attr().href;
-
-
-//             // const article = {
-//             //     name:newTitle,
-//             //     url: url
-//             // }
-//             // console.log(article)
-//             // const header = {
-//             //     name: title
-//             // }
-//             // console.log(header)
-          
-//             // $('.title-container h3 a').each((element) => {
-//             //     const title = 
-//             //     console.log(title)
-                
-//             // })
-            
-            
-      
-         
-            
-//             // let article = {
-//             //     title: title,
-//             //     url: url
-
-//             // }
-            
-//             // console.log(article)})
-        
-           
-         
-//             // for(var i = 0; i < results.length; i++) {
-                
-//             // }
-            
-//             // for(var i = 0; i < result.length; i++){
-//             //     console.log(result[i])
-//             // }
-           
-//          })
+        })
+        .catch(err => console.log(err))
         
     })
- }         
-        
-    
-scraper();
-
-
-// requests and scrapes 20 articles from an api of my choosing
-router.get('/scrape', (req, res) => {
-    res.render('articles')
-    
-    
-
+     
+      
+       
 })
+    
+       
+
+// router.get('/articles/:id', (req, res) => {
+//     Article.findOne({"_id": req.params.id})
+//     .exec(function(err, article){
+//         if(err){
+//             console.log(err)
+//         }
+//         else{
+//             res.json(article)
+//         }
+//     })
+// })
+
+// router.post("/articles/save/:id", function(req, res) {
+//     // Use the article id to find and update its saved boolean
+//     Article.findOneAndUpdate({ "_id": req.params.id }, { "saved": true})
+//     // Execute the above query
+//     .exec(function(err, article) {
+//       if (err) {
+//         console.log(err);
+//       }
+//       else {
+//         res.json(article)
+//       }
+//     });
+// });
+
+
+
+
+
+
+
+
 
 
 module.exports = router;

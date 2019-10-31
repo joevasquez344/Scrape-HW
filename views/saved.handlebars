@@ -1,28 +1,20 @@
-<div class="jumbotron jumbotron-fluid">
-  <div class="container">
-    <h1 class="display-4">Saved</h1>
-    <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+<div class="container">
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4">Home</h1>
+      <p class="lead">Saved Articles</p>
+    </div>
+  </div>
+  <div class="col-md-12">
+    {{#if articles}}
+      {{#each articles}}
+        <p>{{this.title}}</p>
+        <p>{{this.link}}</p>
+      {{/each}}
+    {{else}}
+    <p>No Saved Articles</p>
+  {{/if}}
   </div>
 </div>
-<ul>
-    {{#each savedArticles}}
-        <li>
-            {{headline}}
-            {{summary}}
-            {{url}}
-            <a class='btn btn-primary' id='editBtn' href="#">Edit Article</a>
-            <a class='btn btn-primary' id='deleteBtn' href="#">Delete Article</a>
-        </li>
-    {{/each}}
-</ul>
 
-{{!-- <script>
-    $('#editBtn').on('click', (event) => {
-        event.preventDefault();
-        $.get
-    })
-    $('#editBtn').on('click', (event) => {
-        event.preventDefault();
-        
-    })
-</script> --}}
+

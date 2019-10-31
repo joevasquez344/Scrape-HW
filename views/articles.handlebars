@@ -1,16 +1,27 @@
-<div class="jumbotron jumbotron-fluid">
-  <div class="container">
-    <h1 class="display-4">Articles Scraped</h1>
-    <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
-  </div>
-</div>
-<ul>
-    {{#each scrapedArticles}}
-        <li>
-            {{headline}}
-            {{summary}}
-            {{url}}
-            <a class='btn btn-primary' href="#">Save Article</a>
-        </li>
+
+<div class='ul-list'>
+
+    {{#each articles}}
+   
+    <div class='border border-primary mb-2 p-2 d-flex flex-row justify-content-between'>
+        <div class="wrapper">
+            <div>Title: {{this.title}}</div>
+            <div>URL: {{this.link}}</div>
+        </div>
+        <button class='btn btn-primary' id='saveBtn' data-id={{this._id}}>Save Article</button>
+    </div>
+ 
     {{/each}}
-</ul>
+  
+
+</div>
+
+<script>
+    $("#saveBtn").on("click", function () {
+        const thisId = $(this).attr("data-id");
+        const route = window.location.assign("/articles/save" + thisId);
+        axios.post(route).then((data) => {
+            console.log(data)
+        });
+    })  
+</script>
